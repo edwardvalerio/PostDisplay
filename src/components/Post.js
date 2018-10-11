@@ -62,7 +62,7 @@ class Post extends Component {
 
          <div className="card-action right-align">
 
-          <Link className="white-text" to='/'><i class="tiny material-icons">arrow_back</i> back</Link>
+          <Link className="white-text" to='/'> back</Link>
 
          </div>
 

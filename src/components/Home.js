@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 
 class Home extends Component {
 
     constructor(props) {
+
         super(props);
 
         this.state = {
@@ -15,7 +17,6 @@ class Home extends Component {
                   };
 
         this.getPostsList = this.getPostsList.bind(this);
-
 
 
     }
@@ -37,19 +38,26 @@ class Home extends Component {
         })
 
 
+
     }
+
+
+
 
 
     getPostsList(postsList)  {
 
 
+     if(postsList) {
 
-
-    return  postsList.map(post =>{
+    return  postsList.map(post => {
 
         var id = post.id;
-        var title = post.title['rendered'];
-        var excerpt = post.excerpt['rendered'];
+        // var title = post.title['rendered'];
+        // var excerpt = post.excerpt['rendered'];
+
+        var title = post.title;
+        var excerpt = post.excerpt;
 
 
         return(
@@ -60,21 +68,30 @@ class Home extends Component {
       <div className="card-panel hoverable blue darken-1">
         <div className="card-content white-text">
           <span className="card-title">{  ReactHtmlParser( title ) }</span>
-          {  ReactHtmlParser(excerpt) }
+            <p> {  ReactHtmlParser(excerpt) } </p>
         </div>
         <div className="card-action right-align">
-          <Link className="white-text" to={ '/post/' + id } >view post <i class="tiny material-icons">arrow_forward</i> </Link>
+          <Link className="white-text" to={ '/post/' + id } >view post  </Link>
 
         </div>
       </div>
     </div>
   </div>
 
-
-
         )
+        }  );
 
-        });
+     }
+
+        else {
+
+
+            return( <p>No posts have been loaded yet</p>);
+
+        }
+
+
+
 
 
     }
@@ -82,12 +99,15 @@ class Home extends Component {
     render() {
 
 
-        const { posts } = this.state;
+        console.log(this.props);
+
+        const { posts } = this.props;
 
         const postList = this.getPostsList(posts);
 
 
         return(
+
 
            <div className="container">
 
@@ -101,4 +121,15 @@ class Home extends Component {
 
 }
 
-export default Home;
+
+const mapStateToProps = (state) => {
+
+    return {
+        posts: state.posts
+    }
+}
+
+
+
+
+export default connect(mapStateToProps)(Home);
